@@ -1,0 +1,25 @@
+{% load static %}
+<div style="padding:1rem 1.5rem;border-bottom:1px solid var(--border);margin-bottom:0.5rem;">
+    <div style="font-size:1rem;font-weight:700;color:var(--accent);">CMS Dashboard</div>
+    <div style="font-size:0.8rem;color:var(--text-dim);">{{ request.user.username }}</div>
+</div>
+<ul class="sidebar-nav">
+    <li class="sidebar-section-label">Main</li>
+    <li><a href="{% url 'dashboard' %}"><i class="fa-solid fa-gauge"></i> Overview</a></li>
+    <li><a href="{% url 'home' %}" target="_blank"><i class="fa-solid fa-eye"></i> View Site</a></li>
+    <li><a href="{% url 'profile_edit' %}"><i class="fa-solid fa-user-pen"></i> Edit Profile</a></li>
+
+    <li class="sidebar-section-label">Content</li>
+    <li><a href="{% url 'dashboard_projects' %}"><i class="fa-solid fa-code-branch"></i> Projects</a></li>
+    <li><a href="{% url 'dashboard_skills' %}"><i class="fa-solid fa-laptop-code"></i> Skills</a></li>
+    <li><a href="{% url 'dashboard_achievements' %}"><i class="fa-solid fa-trophy"></i> Achievements</a></li>
+    <li><a href="{% url 'dashboard_educations' %}"><i class="fa-solid fa-graduation-cap"></i> Education</a></li>
+
+    <li class="sidebar-section-label">Inbox</li>
+    <li><a href="{% url 'dashboard_messages' %}"><i class="fa-solid fa-envelope"></i> Messages</a></li>
+
+    <li class="sidebar-section-label">System</li>
+    <li><a href="/admin/"><i class="fa-solid fa-screwdriver-wrench"></i> Django Admin</a></li>
+    <li><a href="/api/projects/"><i class="fa-solid fa-plug"></i> API Explorer</a></li>
+    <li><a href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+</ul>

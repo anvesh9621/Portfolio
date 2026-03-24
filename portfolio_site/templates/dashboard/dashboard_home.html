@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">CMS Dashboard</div>
+            <div class="sidebar-user">{{ user.username }}</div>
+        </div>
+
+        <ul class="sidebar-nav">
+            <li class="sidebar-section-label">Main</li>
+            <li><a href="{% url 'dashboard' %}" class="active"><i class="fa-solid fa-gauge"></i> Overview</a></li>
+            <li><a href="{% url 'home' %}" target="_blank"><i class="fa-solid fa-eye"></i> View Site</a></li>
+            <li><a href="{% url 'profile_edit' %}"><i class="fa-solid fa-user-pen"></i> Edit Profile</a></li>
+
+            <li class="sidebar-section-label">Content</li>
+            <li><a href="{% url 'dashboard_projects' %}"><i class="fa-solid fa-code-branch"></i> Projects</a></li>
+            <li><a href="{% url 'dashboard_skills' %}"><i class="fa-solid fa-laptop-code"></i> Skills</a></li>
+            <li><a href="{% url 'dashboard_achievements' %}"><i class="fa-solid fa-trophy"></i> Achievements</a></li>
+            <li><a href="{% url 'dashboard_educations' %}"><i class="fa-solid fa-graduation-cap"></i> Education</a></li>
+
+            <li class="sidebar-section-label">Inbox</li>
+            <li>
+                <a href="{% url 'dashboard_messages' %}">
+                    <i class="fa-solid fa-envelope"></i> Messages
+                    {% if unread_messages > 0 %}
+                    <span class="badge badge-red" style="margin-left:auto;">{{ unread_messages }}</span>
+                    {% endif %}
+                </a>
+            </li>
+
+            <li class="sidebar-section-label">System</li>
+            <li><a href="/admin/"><i class="fa-solid fa-screwdriver-wrench"></i> Django Admin</a></li>
+            <li><a href="/api/projects/"><i class="fa-solid fa-plug"></i> API Explorer</a></li>
+            <li><a href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <div class="dash-page-header">
+            <h1 class="dash-title">Dashboard Overview</h1>
+            <p class="text-muted">Welcome back, {{ user.username }}. Here's your portfolio at a glance.</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-code-branch"></i></div>
+                <div class="stat-value">{{ project_count }}</div>
+                <div class="stat-label">Total Projects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
+                <div class="stat-value">{{ featured_count }}</div>
+                <div class="stat-label">Featured</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                <div class="stat-value">{{ skill_count }}</div>
+                <div class="stat-label">Skills</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div class="stat-value">{{ education_count }}</div>
+                <div class="stat-label">Educations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-envelope"></i></div>
+                <div class="stat-value">{{ unread_messages }}</div>
+                <div class="stat-label">Unread Messages</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="dash-card">
+            <h3 class="dash-card-title">Quick Actions</h3>
+            <div class="dash-actions">
+                <a href="{% url 'add_project' %}" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Add
+                    Project</a>
+                <a href="{% url 'dashboard_skills' %}" class="btn btn-outline btn-sm"><i
+                        class="fa-solid fa-folder-open"></i> Manage
+                    Skills</a>
+                <a href="{% url 'add_achievement' %}" class="btn btn-outline btn-sm"><i class="fa-solid fa-plus"></i>
+                    Add Achievement</a>
+                <a href="{% url 'dashboard_messages' %}" class="btn btn-ghost btn-sm"><i class="fa-solid fa-inbox"></i>
+                    View Messages</a>
+            </div>
+        </div>
+
+        <!-- Resume Management -->
+        <div class="dash-card">
+            <div class="dash-card-header">
+                <h3 class="dash-card-title"><i class="fa-solid fa-file-pdf"
+                        style="color:var(--accent);margin-right:0.5rem;"></i>Resume Management</h3>
+                <a href="{% url 'profile_edit' %}" class="btn btn-primary btn-sm">
+                    <i class="fa-solid fa-upload"></i>
+                    {% if profile and profile.resume %}Replace Resume{% else %}Upload Resume{% endif %}
+                </a>
+            </div>
+            <div style="margin-top:1rem;">
+                {% if profile and profile.resume %}
+                <div class="resume-status resume-status--uploaded">
+                    <div class="resume-status-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="resume-status-info">
+                        <div class="resume-status-label">Google Drive link saved</div>
+                        <div class="resume-status-filename">{{ profile.resume|truncatechars:60 }}</div>
+                    </div>
+                    <a href="{{ profile.resume }}" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Preview
+                    </a>
+                </div>
+                <p style="font-size:0.82rem;color:var(--text-muted);margin-top:0.75rem;">
+                    <i class="fa-solid fa-circle-info"></i>
+                    This Google Drive link powers the <strong>Download Resume</strong> button on your homepage. Visitors
+                    will be taken to Google Drive where they can view &amp; download the PDF.
+                </p>
+                {% else %}
+                <div class="resume-status resume-status--missing">
+                    <div class="resume-status-icon"><i class="fa-solid fa-circle-exclamation"></i></div>
+                    <div class="resume-status-info">
+                        <div class="resume-status-label">No Google Drive link saved yet</div>
+                        <div class="resume-status-filename">The Download Resume button on your homepage is currently
+                            inactive.</div>
+                    </div>
+                </div>
+                <p style="font-size:0.82rem;color:var(--text-muted);margin-top:0.75rem;">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Click <strong>Upload Resume</strong> above &rarr; paste your Google Drive share link into the
+                    <em>Resume</em> field &rarr; Save.
+                    <br>To get the link: open your PDF in Google Drive &rarr; Share &rarr; <em>Anyone with the link can
+                        view</em> &rarr; Copy link.
+                </p>
+                {% endif %}
+            </div>
+        </div>
+
+
+
+        <!-- Recent unread messages -->
+        {% if recent_messages %}
+        <div class="dash-card dash-card-flush">
+            <div class="dash-card-header">
+                <h3 class="dash-card-title">Recent Unread Messages</h3>
+                <a href="{% url 'dashboard_messages' %}" class="btn btn-ghost btn-sm">View All</a>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>Email</th>
+                        <th>Received</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for msg in recent_messages %}
+                    <tr>
+                        <td><strong>{{ msg.name }}</strong></td>
+                        <td class="text-muted">{{ msg.email }}</td>
+                        <td class="text-muted">{{ msg.timestamp|date:"M d, Y" }}</td>
+                        <td>
+                            <a href="{% url 'mark_message_read' msg.pk %}" class="btn btn-ghost btn-sm">
+                                <i class="fa-solid fa-check"></i> Mark Read
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+    </main>
+</div>
+{% endblock %}

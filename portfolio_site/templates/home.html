@@ -1,0 +1,344 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Home{% endblock %}
+{% block meta_description %}Backend Django Developer — Python, PostgreSQL, REST APIs, Docker{% endblock %}
+
+{% block content %}
+
+<!-- ── HERO ──────────────────────────────────────────────────────────────────── -->
+<section class="hero">
+    <div class="container hero-container">
+        <div class="hero-flex">
+
+            <!-- ── Left: Text Block ── -->
+            <div class="hero-text">
+                <div class="hero-greeting animate-fade-up">Hi, I'm</div>
+                <h1 class="hero-name animate-fade-up-delay-1">
+                    {% if profile %}{{ profile.name }}{% else %}Your Name{% endif %}
+                </h1>
+                <div class="hero-role animate-fade-up-delay-1"
+                    style="min-height: 2em; display:flex; align-items:flex-start;">
+                    {% if profile %}
+                    <span id="animated-role" data-roles="{{ profile.role }}">
+                        {{ profile.role|truncatewords:10 }}
+                    </span>
+                    {% else %}
+                    <span id="animated-role" data-roles="Backend Django Developer">
+                        Backend Django Developer
+                    </span>
+                    {% endif %}
+                </div>
+                <p class="hero-bio animate-fade-up-delay-2">
+                    {% if profile %}
+                    {{ profile.bio }}
+                    {% else %}
+                    Building scalable, production-ready applications with Django, PostgreSQL, and REST APIs.
+                    {% endif %}
+                </p>
+                <!-- Buttons -->
+                <div class="hero-actions animate-fade-up-delay-2">
+                    <a href="{% url 'projects:list' %}" class="btn btn-primary btn-sm">
+                        View My Work &rarr;
+                    </a>
+                    {% if profile and profile.resume %}
+                    <a href="{{ profile.resume_download_url }}" class="btn btn-outline btn-sm" target="_blank"
+                        rel="noopener" download>
+                        <i class="fa-solid fa-download"></i> Resume
+                    </a>
+                    {% else %}
+                    <span class="btn btn-outline btn-sm btn-disabled" title="Resume not yet uploaded">
+                        <i class="fa-solid fa-download"></i> Resume
+                    </span>
+                    {% endif %}
+                </div>
+
+                <!-- Social Icons + Contact Pill -->
+                <div class="social-links animate-fade-up-delay-3">
+                    {% if profile %}
+                    {% if profile.github_url %}
+                    <a href="{{ profile.github_url }}" class="social-link" target="_blank" rel="noopener" title="GitHub"
+                        aria-label="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    {% else %}
+                    <a href="#" class="social-link" title="GitHub" aria-label="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    {% endif %}
+                    {% if profile.linkedin_url %}
+                    <a href="{{ profile.linkedin_url }}" class="social-link" target="_blank" rel="noopener"
+                        title="LinkedIn" aria-label="LinkedIn">
+                        <i class="fa-brands fa-linkedin-in"></i>
+                    </a>
+                    {% else %}
+                    <a href="#" class="social-link" title="LinkedIn" aria-label="LinkedIn">
+                        <i class="fa-brands fa-linkedin-in"></i>
+                    </a>
+                    {% endif %}
+                    {% if profile.email_contact %}
+                    <a href="mailto:{{ profile.email_contact }}" class="social-link" title="Email" aria-label="Email">
+                        <i class="fa-solid fa-envelope"></i>
+                    </a>
+                    {% endif %}
+                    {% else %}
+                    <a href="#" class="social-link" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="social-link" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    {% endif %}
+                    <!-- Contact icon button — same style as GitHub/LinkedIn/Mail -->
+                    <a href="{% url 'contact' %}" class="social-link" title="Contact Me" aria-label="Contact">
+                        <i class="fa-solid fa-phone"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ── Right: Profile Image ── -->
+            <div class="hero-image-wrap animate-fade-up">
+                <div class="hero-image-container">
+                    {% if profile and profile.profile_image %}
+                    <img src="{{ profile.profile_image.url }}" alt="{{ profile.name }}" class="hero-image" />
+                    {% else %}
+                    <div class="hero-image-placeholder"><i class="fa-solid fa-user"></i></div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+<!-- ── FEATURED PROJECTS ─────────────────────────────────────────────────────── -->
+{% if featured_projects %}
+<section class="section featured-projects-section" id="projects">
+    <div class="container">
+
+        <!-- Section Header -->
+        <div class="section-header text-center" style="margin-bottom: 3.5rem;">
+            <h2 class="section-title">Featured Projects</h2>
+            <p class="section-sub" style="margin: 0 auto;">A selection of my recent work</p>
+        </div>
+
+        <!-- Cards Grid -->
+        <div class="project-card-grid">
+            {% for project in featured_projects %}
+            <div class="project-card">
+
+                <!-- Image -->
+                {% if project.image %}
+                <div class="project-card-img-wrap">
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}" class="project-card-img" />
+                </div>
+                {% else %}
+                <div class="project-card-img-wrap project-card-img-placeholder">
+                    <i class="fa-solid fa-code"></i>
+                </div>
+                {% endif %}
+
+                <!-- Body -->
+                <div class="project-card-body">
+                    <h3 class="project-card-title">
+                        <a href="{% url 'projects:detail' project.slug %}" class="project-card-link">
+                            {{ project.title }}
+                        </a>
+                    </h3>
+                    <ul class="project-card-bullets">
+                        {% for bullet in project.get_card_bullets %}
+                        <li>{{ bullet|truncatechars:100 }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    <div class="tech-tags">
+                        {% for tech in project.get_tech_list %}
+                        <span class="tech-tag">{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="project-links">
+                        <a href="{{ project.github_link }}" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">
+                            <i class="fa-brands fa-github"></i> Code
+                        </a>
+                        {% if project.live_demo_link %}
+                        <a href="{{ project.live_demo_link }}" class="btn btn-outline btn-sm" target="_blank"
+                            rel="noopener">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- View All Button -->
+        <div class="text-center" style="margin-top: 3.5rem;">
+            <a href="{% url 'projects:list' %}" class="btn btn-primary"
+                style="padding: 0.8rem 2.5rem; font-weight: 500;">
+                View All Projects &rarr;
+            </a>
+        </div>
+
+    </div>
+</section>
+{% endif %}
+
+
+
+<!-- ── TECHNICAL SKILLS ──────────────────────────────────────────────────────── -->
+{% if categories %}
+<section class="section skills-section" id="skills">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="section-header text-center">
+            <h2 class="section-title">Technical Skills</h2>
+            <p class="section-sub" style="margin: 0 auto;">My expertise across various technologies and tools</p>
+        </div>
+
+        <!-- Skills Grid -->
+        <div class="skills-grid">
+            {% for category in categories %}
+            <div class="skill-category-box">
+                <h3 class="skill-category-title">{{ category.name }}</h3>
+                <div class="skill-badges">
+                    {% for skill in category.skills.all %}
+                    <span class="skill-badge-pill">
+                        {% if skill.icon_class %}
+                        <i class="{{ skill.icon_class }}"></i>
+                        {% else %}
+                        <i class="fa-solid fa-circle skill-icon-fallback"></i>
+                        {% endif %}
+                        {{ skill.name }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+<!-- ── ACHIEVEMENTS ──────────────────────────────────────────────────────────── -->
+{% if achievements %}
+<section class="section" id="achievements">
+    <div class="container">
+        <div class="section-header text-center">
+            <h2 class="section-title">Achievements &amp; Certifications</h2>
+            <p class="section-sub" style="margin:0 auto;">Recognition and milestones from my technical journey
+            </p>
+        </div>
+
+        <div class="grid grid-3">
+            {% for achievement in achievements %}
+            <div class="achievement-card">
+                {% if achievement.image %}
+                <div class="achievement-img-wrap">
+                    <img src="{{ achievement.image.url }}" alt="{{ achievement.title }}" class="achievement-img" />
+                </div>
+                {% endif %}
+                <div class="achievement-card-body">
+                    <span class="achievement-category" style="align-self: flex-start; margin-bottom: 0.5rem;">
+                        {{ achievement.get_category_display }}
+                    </span>
+                    <h3 class="achievement-title" style="flex-grow: 1;">{{ achievement.title }}</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                        <div class="achievement-date" style="margin-top: 0;">
+                            <i class="fa-regular fa-calendar"></i>
+                            {{ achievement.date|date:"M Y" }}
+                        </div>
+                        {% if achievement.url_link %}
+                        <a href="{{ achievement.url_link }}" target="_blank" rel="noopener"
+                            style="color:var(--text-muted); font-size:1.1rem; transition: color 0.3s ease;"
+                            onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'"
+                            title="View Link">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+<!-- ── CALL TO ACTION ────────────────────────────────────────────────────────── -->
+<section class="section-sm cta-section">
+    <div class="container text-center">
+        <h2 class="cta-title">Interested in working together?</h2>
+        <p class="cta-sub">Let’s create something meaningful and scalable.</p>
+        <a href="{% url 'contact' %}" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-paper-plane"></i> Get in Touch
+        </a>
+    </div>
+</section>
+
+<!-- ── ANIMATED ROLE SCRIPT (TYPING EFFECT) ─────────────────────────────────── -->
+<style>
+    .typing-cursor {
+        font-weight: 400;
+        color: var(--accent);
+        animation: blink 1s step-end infinite;
+        margin-left: 2px;
+    }
+
+    @keyframes blink {
+        50% {
+            opacity: 0;
+        }
+    }
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const roleSpan = document.getElementById('animated-role');
+        if (roleSpan) {
+            const rolesData = roleSpan.getAttribute('data-roles');
+            if (rolesData) {
+                const roles = rolesData.split(',').map(r => r.trim()).filter(r => r.length > 0);
+
+                if (roles.length > 0) {
+                    let roleIndex = 0;
+                    let charIndex = 0;
+                    let isDeleting = false;
+
+                    // Clear the initial text immediately so the typing animation starts clean
+                    roleSpan.innerText = "";
+
+                    function typeEffect() {
+                        const currentRole = roles[roleIndex];
+
+                        if (isDeleting) {
+                            roleSpan.innerText = currentRole.substring(0, charIndex - 1);
+                            charIndex--;
+                        } else {
+                            roleSpan.innerText = currentRole.substring(0, charIndex + 1);
+                            charIndex++;
+                        }
+
+                        let typeSpeed = isDeleting ? 40 : 100;
+
+                        if (!isDeleting && charIndex === currentRole.length) {
+                            typeSpeed = 2000; // Pause at end of word
+                            isDeleting = true;
+                        } else if (isDeleting && charIndex === 0) {
+                            isDeleting = false;
+                            roleIndex = (roleIndex + 1) % roles.length;
+                            typeSpeed = 500; // Pause before typing new word
+                        }
+
+                        setTimeout(typeEffect, typeSpeed);
+                    }
+
+                    // Kick off the animation loop
+                    typeEffect();
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

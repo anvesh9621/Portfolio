@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Manage Achievements{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+    <aside class="sidebar">{% include "dashboard/sidebar_nav.html" %}</aside>
+    <main class="dashboard-main">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+            <div>
+                <h1 style="font-size:1.5rem;margin-bottom:0.2rem;">Achievements</h1>
+                <p class="text-muted">Manage certifications and recognitions</p>
+            </div>
+            <a href="{% url 'add_achievement' %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add
+                Achievement</a>
+        </div>
+
+        {% if achievements %}
+        <div
+            style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for achievement in achievements %}
+                    <tr>
+                        <td><strong>{{ achievement.title }}</strong></td>
+                        <td><span class="badge badge-blue">{{ achievement.get_category_display }}</span></td>
+                        <td class="text-muted">{{ achievement.date|date:"M Y" }}</td>
+                        <td>
+                            <div style="display:flex;gap:0.5rem;">
+                                <a href="{% url 'edit_achievement' achievement.pk %}" class="btn btn-ghost btn-sm"><i
+                                        class="fa-solid fa-pen"></i></a>
+                                <a href="{% url 'delete_achievement' achievement.pk %}" class="btn btn-danger btn-sm"><i
+                                        class="fa-solid fa-trash"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center"
+            style="padding:3rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);">
+            <i class="fa-solid fa-trophy"
+                style="font-size:2.5rem;color:var(--text-dim);margin-bottom:1rem;display:block;"></i>
+            <p class="text-muted">No achievements yet. <a href="{% url 'add_achievement' %}">Add your first</a></p>
+        </div>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

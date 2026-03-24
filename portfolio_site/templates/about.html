@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}About{% endblock %}
+{% block meta_description %}About me — background, skills, education, achievements{% endblock %}
+
+{% block content %}
+
+<section class="about-header page-header">
+    <div class="container">
+        <h1>About Me</h1>
+        <p>Get to know more about my background and skills</p>
+    </div>
+</section>
+
+<section class="about-content section">
+    <div class="container">
+        <div class="about-layout text-start">
+
+            <!-- Left Side: Who I Am -->
+            <div class="about-left">
+                <div class="timeline-header">
+                    <h2>Who I Am</h2>
+                </div>
+                
+                <div class="bio-card">
+                    <i class="fa-solid fa-quote-left bio-quote-icon"></i>
+                    <div class="about-bio-text">
+                        {% if profile %}
+                        {% if profile.about_bio %}
+                        {{ profile.about_bio|linebreaks }}
+                        {% elif profile.bio %}
+                        {{ profile.bio|linebreaks }}
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Education -->
+            <div class="about-right">
+                <div class="timeline-header">
+                    <h2>Education</h2>
+                </div>
+                
+                <div class="education-timeline-wrapper">
+                    <div class="education-list timeline">
+                        {% if educations %}
+                        {% for edu in educations %}
+                        <div class="timeline-item">
+                            <div class="timeline-dot">
+                                {% if forloop.counter == 1 %}
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                {% elif forloop.counter == 2 %}
+                                    <i class="fa-solid fa-school"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-file-lines"></i>
+                                {% endif %}
+                            </div>
+                            <div class="education-card" style="display: flex; flex-direction: column;">
+                                <h3 class="edu-course">{{ edu.course }}</h3>
+                                <div class="edu-institution" style="flex-grow: 1;">{{ edu.institution_name }}</div>
+                                <div class="edu-meta"
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; color: var(--text-dim); font-size: 0.95rem;">
+                                    <span class="edu-duration">
+                                        {{ edu.start_date|date:"F Y" }} &ndash;
+                                        {% if edu.is_current %}
+                                        Present
+                                        {% else %}
+                                        {{ edu.end_date|date:"F Y" }}
+                                        {% endif %}
+                                    </span>
+                                    <span class="edu-location">
+                                        {{ edu.location }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <p style="color:var(--text-muted);">No education details added yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% if categories %}
+<section class="section bg-secondary">
+    <div class="container">
+        <div>
+            <!-- Section Header -->
+            <div class="section-header text-center">
+                <h2 class="section-title">Technical Skills</h2>
+                <p class="section-sub" style="margin: 0 auto;">My expertise across various technologies and
+                    tools</p>
+            </div>
+
+            <!-- Skills Grid -->
+            <div class="skills-grid">
+                {% for category in categories %}
+                <div class="skill-category-box">
+                    <h3 class="skill-category-title">{{ category.name }}</h3>
+                    <div class="skill-badges">
+                        {% for skill in category.skills.all %}
+                        <span class="skill-badge-pill">
+                            {% if skill.icon_class %}
+                            <i class="{{ skill.icon_class }}"></i>
+                            {% else %}
+                            <i class="fa-solid fa-circle skill-icon-fallback"></i>
+                            {% endif %}
+                            {{ skill.name }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Achievements -->
+{% if achievements %}
+<section class="section">
+    <div class="container">
+        <div>
+            <div class="section-header text-center">
+                <h2 class="section-title" style="margin-bottom:0.5rem;">Achievements &amp; Certifications</h2>
+                <p class="section-sub" style="margin:0 auto;">Recognition and milestones from my technical journey</p>
+            </div>
+            <div class="grid grid-3">
+                {% for achievement in achievements %}
+                <div class="achievement-card">
+                    {% if achievement.image %}
+                    <div class="achievement-img-wrap">
+                        <img src="{{ achievement.image.url }}" alt="{{ achievement.title }}" class="achievement-img" />
+                    </div>
+                    {% endif %}
+                    <div class="achievement-card-body">
+                        <span class="achievement-category" style="align-self: flex-start; margin-bottom: 0.5rem;">
+                            {{ achievement.get_category_display }}
+                        </span>
+                        <h3 class="achievement-title" style="flex-grow: 1;">{{ achievement.title }}</h3>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                            <div class="achievement-date" style="margin-top: 0;">
+                                <i class="fa-regular fa-calendar"></i>
+                                {{ achievement.date|date:"M Y" }}
+                            </div>
+                            {% if achievement.url_link %}
+                            <a href="{{ achievement.url_link }}" target="_blank" rel="noopener"
+                                style="color:var(--text-muted); font-size:1.1rem; transition: color 0.3s ease;"
+                                onmouseover="this.style.color='var(--accent)'"
+                                onmouseout="this.style.color='var(--text-muted)'" title="View Link">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

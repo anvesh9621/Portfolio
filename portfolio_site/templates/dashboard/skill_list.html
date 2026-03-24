@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Manage Skills{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+    <aside class="sidebar">{% include "dashboard/sidebar_nav.html" %}</aside>
+    <main class="dashboard-main">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+            <div>
+                <h1 style="font-size:1.5rem;margin-bottom:0.2rem;">Skills & Categories</h1>
+                <p class="text-muted">Manage your technical skills organized by category</p>
+            </div>
+            <a href="{% url 'add_skill_category' %}" class="btn btn-primary"><i class="fa-solid fa-folder-plus"></i> Add
+                Category</a>
+        </div>
+
+        {% if categories %}
+        {% for category in categories %}
+        <div
+            style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);margin-bottom:2rem;overflow:hidden;">
+            <!-- Category Header -->
+            <div
+                style="padding:1rem 1.5rem;background:var(--surface-2);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+                <h2 style="font-size:1.1rem;margin:0;display:flex;align-items:center;gap:0.5rem;color:var(--text);">
+                    <i class="fa-solid fa-folder-open" style="color:var(--accent);"></i> {{ category.name }}
+                </h2>
+                <div style="display:flex;gap:0.5rem;">
+                    <a href="{% url 'add_skill' category.id %}" class="btn btn-primary btn-sm"><i
+                            class="fa-solid fa-plus"></i> Add Skill</a>
+                    <a href="{% url 'edit_skill_category' category.id %}" class="btn btn-ghost btn-sm"
+                        title="Edit Category"><i class="fa-solid fa-pen"></i></a>
+                    <a href="{% url 'delete_skill_category' category.id %}" class="btn btn-danger btn-sm"
+                        title="Delete Category"><i class="fa-solid fa-trash"></i></a>
+                </div>
+            </div>
+
+            <!-- Skills Table -->
+            {% if category.skills.all %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Skill</th>
+                        <th>Icon Class</th>
+                        <th>Order</th>
+                        <th style="width:100px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for skill in category.skills.all %}
+                    <tr>
+                        <td>
+                            {% if skill.icon_class %}
+                            <i class="{{ skill.icon_class }}"
+                                style="color:var(--text-dim);font-size:1.1rem;width:20px;text-align:center;"></i>
+                            {% endif %}
+                            {{ skill.name }}
+                            </strong>
+                        </td>
+                        <td class="text-muted"><code>{{ skill.icon_class|default:"None" }}</code></td>
+                        <td class="text-muted">{{ skill.order }}</td>
+                        <td>
+                            <div style="display:flex;gap:0.5rem;">
+                                <a href="{% url 'edit_skill' skill.id %}" class="btn btn-ghost btn-sm"><i
+                                        class="fa-solid fa-pen"></i></a>
+                                <a href="{% url 'delete_skill' skill.id %}" class="btn btn-danger btn-sm"><i
+                                        class="fa-solid fa-trash"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div style="padding:2rem;text-align:center;color:var(--text-muted);">
+                <p style="margin:0;">No skills in this category yet. <a href="{% url 'add_skill' category.id %}">Add one
+                        now</a>.</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="text-center"
+            style="padding:3rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);">
+            <i class="fa-solid fa-folder-tree"
+                style="font-size:2.5rem;color:var(--text-dim);margin-bottom:1rem;display:block;"></i>
+            <p class="text-muted">No categories created yet. <a href="{% url 'add_skill_category' %}">Add your first
+                    category</a></p>
+        </div>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

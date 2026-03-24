@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Contact{% endblock %}
+{% block meta_description %}Get in touch - available for freelance projects and full-time opportunities.{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div class="container">
+        <h1>Get In Touch</h1>
+        <p style="max-width: 600px; margin: 0 auto;">Have a project in mind or want to collaborate? I'd love to hear
+            from you!</p>
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <div class="contact-grid">
+
+            <!-- Left: Info -->
+            <div>
+                <h2 class="section-title" style="font-size: 1.8rem; font-weight: 600; margin-bottom: 1rem;">Connect with
+                    me</h2>
+                <p class="text-muted" style="margin-bottom:2.5rem;line-height:1.8;">
+                    You can also reach out to me directly through these channels
+                </p>
+
+                <div class="contact-info-item">
+                    <div class="contact-icon"><i class="fa-brands fa-github"></i></div>
+                    <div>
+                        <div class="contact-info-label">GitHub</div>
+                        {% if profile and profile.github_url %}
+                        <a href="{{ profile.github_url }}" class="text-muted" target="_blank"
+                            rel="noopener">anvesh_github</a>
+                        {% else %} 
+                        <span class="text-muted">github.com/username</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="contact-info-item">
+                    <div class="contact-icon"><i class="fa-brands fa-linkedin-in"></i></div>
+                    <div>
+                        <div class="contact-info-label">LinkedIn</div>
+                        {% if profile and profile.linkedin_url %}
+                        <a href="{{ profile.linkedin_url }}" class="text-muted" target="_blank"
+                            rel="noopener">anvesh_linkedin</a>
+                        {% else %}
+                        <span class="text-muted">linkedin.com/in/username</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if profile and profile.email_contact %}
+                <div class="contact-info-item">
+                    <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+                    <div>
+                        <div class="contact-info-label">Email</div>
+                        <a href="mailto:{{ profile.email_contact }}" class="text-muted">{{ profile.email_contact }}</a>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="contact-info-item">
+                    <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+                    <div>
+                        <div class="contact-info-label">Current Location</div>
+                        <span class="text-muted">Phagwara, Punjab, India</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Contact Form -->
+            <div>
+                <div class="contact-form-card">
+                    <h3 class="contact-form-title">Send a Message</h3>
+
+                    <form method="POST" action="{% url 'contact' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="form-label" for="name">Full Name</label>
+                            <input type="text" name="name" id="name" class="form-control" placeholder="John Doe"
+                                required />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email Address</label>
+                            <input type="email" name="email" id="email" class="form-control"
+                                placeholder="john@example.com" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="message">Message</label>
+                            <textarea name="message" id="message" class="form-control"
+                                placeholder="Tell me about your project or just say hi..." rows="6" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-full" style="justify-content:center;">
+                            <i class="fa-solid fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

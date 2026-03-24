@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{{ action }} Skill{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+    <aside class="sidebar">{% include "dashboard/sidebar_nav.html" %}</aside>
+    <main class="dashboard-main">
+        <div style="margin-bottom:1.5rem;">
+            <a href="{% url 'dashboard_skills' %}" class="text-muted" style="font-size:0.875rem;"><i
+                    class="fa-solid fa-arrow-left"></i> Back to Skills</a>
+            <h1 style="font-size:1.5rem;margin-top:0.5rem;">{{ action }} Skill {% if category %}in "{{ category.name
+                }}"{% endif %}</h1>
+        </div>
+        <div
+            style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:2rem;max-width:500px;">
+            <form method="POST">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group">
+                    <label class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}<div style="color:var(--red);font-size:0.8rem;margin-top:0.25rem;">{{
+                        field.errors }}</div>{% endif %}
+                </div>
+                {% endfor %}
+                <div style="display:flex;gap:1rem;margin-top:1rem;">
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save
+                        Skill</button>
+                    <a href="{% url 'dashboard_skills' %}" class="btn btn-ghost">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+{% endblock %}

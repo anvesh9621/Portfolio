@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}{{ action }} Education{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+    <aside class="sidebar">{% include "dashboard/sidebar_nav.html" %}</aside>
+    <main class="dashboard-main">
+        <div style="margin-bottom:1.5rem;">
+            <a href="{% url 'dashboard_educations' %}" class="text-muted" style="font-size:0.875rem;"><i
+                    class="fa-solid fa-arrow-left"></i> Back to Educations</a>
+            <h1 style="font-size:1.5rem;margin-top:0.5rem;">{{ action }} Education</h1>
+        </div>
+
+        <div
+            style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:2rem;max-width:600px;">
+            <form method="POST">
+                {% csrf_token %}
+                {% for field in form %}
+                {% if field.name == 'is_current' %}
+                <div class="form-group" style="display:flex; align-items:center; gap:0.5rem;">
+                    {{ field }} <label class="form-label" style="margin-bottom:0;">{{ field.label }}</label>
+                </div>
+                {% else %}
+                <div class="form-group">
+                    <label class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}<div style="font-size:0.8rem;color:var(--text-dim);margin-top:0.25rem;">{{
+                        field.help_text }}</div>{% endif %}
+                    {% if field.errors %}<div style="color:var(--red);font-size:0.8rem;margin-top:0.25rem;">{{
+                        field.errors }}</div>{% endif %}
+                </div>
+                {% endif %}
+                {% endfor %}
+
+                <div style="display:flex;gap:1rem;margin-top:1.5rem;">
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save
+                        Education</button>
+                    <a href="{% url 'dashboard_educations' %}" class="btn btn-ghost">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+{% endblock %}

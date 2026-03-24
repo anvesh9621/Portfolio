@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="{% block meta_description %}Backend Django Developer Portfolio — Python, PostgreSQL, REST APIs{% endblock %}" />
+  <title>{% block title %}Portfolio{% endblock %} | Anvesh Pandey</title>
+
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=1.20" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
+    crossorigin="anonymous" />
+
+  <!-- Prevent theme flash: apply saved/system theme before paint -->
+  <script>
+    (function () {
+      var saved = localStorage.getItem('portfolio-theme');
+      var system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', saved || system);
+    })();
+  </script>
+
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+
+  <!-- ── Navigation ──────────────────────────────────────────────────────────── -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner container">
+      <a href="{% url 'home' %}" class="nav-brand">Anvesh Pandey</a>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'projects:list' %}">Projects</a></li>
+        <li><a href="{% url 'contact' %}">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Dark/Light toggle -->
+        <button class="btn-icon" onclick="toggleTheme()" title="Toggle theme" id="theme-toggle"
+          aria-label="Toggle colour theme">
+          <span id="theme-icon">🌙</span>
+        </button>
+
+        <!-- User icon — login or dashboard -->
+        {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}" class="btn-icon" title="Dashboard" aria-label="Dashboard">
+          <i class="fa-solid fa-user-shield"></i>
+        </a>
+        {% else %}
+        <a href="{% url 'login' %}" class="btn-icon" title="Login" aria-label="Login">
+          <i class="fa-solid fa-user"></i>
+        </a>
+        {% endif %}
+
+        <!-- Hamburger (mobile) -->
+        <div class="hamburger" id="hamburger" aria-label="Toggle navigation">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Flash Messages ──────────────────────────────────────────────────────── -->
+  {% if messages %}
+  <div class="container messages-container">
+    {% for msg in messages %}
+    <div
+      class="alert alert-{% if msg.tags == 'error' %}error{% elif msg.tags == 'success' %}success{% else %}info{% endif %}">
+      <i
+        class="fa-solid {% if msg.tags == 'error' %}fa-circle-exclamation{% elif msg.tags == 'success' %}fa-circle-check{% else %}fa-circle-info{% endif %}"></i>
+      {{ msg }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- ── Page Content ─────────────────────────────────────────────────────────── -->
+  {% block content %}{% endblock %}
+
+  <!-- ── Footer ──────────────────────────────────────────────────────────────── -->
+  {% block footer %}
+  <footer class="footer">
+    <div class="container text-center">
+      <div class="footer-brand" style="margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">
+        <span style="color: var(--accent);">Anvesh</span><span style="color: var(--text);"> Pandey</span>
+      </div>
+
+      <div class="social-links" style="justify-content: center; margin-bottom: 2rem; gap: 1rem;">
+        <a href="{% if profile and profile.github_url %}{{ profile.github_url }}{% else %}#{% endif %}"
+          class="social-link" target="_blank" rel="noopener" aria-label="GitHub"
+          style="background: var(--surface-2); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;"><i
+            class="fa-brands fa-github"></i></a>
+
+        <a href="{% if profile and profile.linkedin_url %}{{ profile.linkedin_url }}{% else %}#{% endif %}"
+          class="social-link" target="_blank" rel="noopener" aria-label="LinkedIn"
+          style="background: var(--surface-2); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;"><i
+            class="fa-brands fa-linkedin-in"></i></a>
+
+        <a href="{% if profile and profile.email_contact %}mailto:{{ profile.email_contact }}{% else %}#{% endif %}"
+          class="social-link" aria-label="Email"
+          style="background: var(--surface-2); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;"><i
+            class="fa-solid fa-envelope"></i></a>
+      </div>
+
+      <ul class="footer-links"
+        style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 2.5rem; flex-wrap: wrap; list-style: none; padding: 0;">
+        <li><a href="{% url 'about' %}"
+            style="color: var(--text-muted); text-decoration: none; font-size: 0.95rem;">About</a></li>
+        <li><a href="{% url 'home' %}#skills"
+            style="color: var(--text-muted); text-decoration: none; font-size: 0.95rem;">Skills</a></li>
+        <li><a href="{% url 'projects:list' %}"
+            style="color: var(--text-muted); text-decoration: none; font-size: 0.95rem;">Projects</a></li>
+        <li><a href="{% url 'home' %}#achievements"
+            style="color: var(--text-muted); text-decoration: none; font-size: 0.95rem;">Certifications</a></li>
+        <li><a href="{% url 'contact' %}"
+            style="color: var(--text-muted); text-decoration: none; font-size: 0.95rem;">Contact</a></li>
+      </ul>
+
+      <div class="footer-bottom"
+        style="flex-direction: column; gap: 0.5rem; border-top: none; padding-top: 0; margin-top: 0;">
+        <span class="footer-copy">© 2026 Anvesh Pandey. All rights reserved.</span>
+        <span class="footer-copy">Aspiring Software Developer | Data & Analytics Enthusiast</span>
+      </div>
+    </div>
+  </footer>
+  {% endblock %}
+
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+
+</html>

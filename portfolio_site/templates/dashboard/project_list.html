@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Manage Projects{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+    <aside class="sidebar">
+        {% include "dashboard/sidebar_nav.html" %}
+    </aside>
+    <main class="dashboard-main">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+            <div>
+                <h1 style="font-size:1.5rem;margin-bottom:0.2rem;">Projects</h1>
+                <p class="text-muted">Manage your portfolio projects</p>
+            </div>
+            <a href="{% url 'add_project' %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Project</a>
+        </div>
+
+        {% if projects %}
+        <div
+            style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Summary</th>
+                        <th>Featured</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                    <tr>
+                        <td><strong>{{ project.title }}</strong></td>
+                        <td class="text-muted"
+                            style="max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{
+                            project.summary }}</td>
+                        <td>
+                            <a href="{% url 'toggle_featured' project.pk %}"
+                                class="badge {% if project.featured %}badge-amber{% else %}badge-blue{% endif %}"
+                                title="Click to toggle">
+                                {% if project.featured %}★ Featured{% else %}Not Featured{% endif %}
+                            </a>
+                        </td>
+                        <td class="text-muted">{{ project.created_date|date:"M d, Y" }}</td>
+                        <td>
+                            <div style="display:flex;gap:0.5rem;">
+                                <a href="{% url 'edit_project' project.pk %}" class="btn btn-ghost btn-sm"><i
+                                        class="fa-solid fa-pen"></i></a>
+                                <a href="{% url 'delete_project' project.pk %}" class="btn btn-danger btn-sm"><i
+                                        class="fa-solid fa-trash"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center"
+            style="padding:3rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);">
+            <i class="fa-solid fa-code"
+                style="font-size:2.5rem;color:var(--text-dim);margin-bottom:1rem;display:block;"></i>
+            <p class="text-muted">No projects yet. <a href="{% url 'add_project' %}">Add your first project</a></p>
+        </div>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

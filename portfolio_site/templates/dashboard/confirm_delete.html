@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Delete {{ type }}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+    <aside class="sidebar">{% include "dashboard/sidebar_nav.html" %}</aside>
+    <main class="dashboard-main">
+        <div style="max-width:480px;">
+            <div
+                style="background:var(--surface);border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-md);padding:2rem;text-align:center;">
+                <div
+                    style="width:64px;height:64px;border-radius:50%;background:rgba(239,68,68,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.75rem;color:var(--red);">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h2 style="margin-bottom:0.75rem;">Delete {{ type }}</h2>
+                <p class="text-muted" style="margin-bottom:1.5rem;">
+                    Are you sure you want to delete <strong>"{{ obj }}"</strong>? This action cannot be undone.
+                </p>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div style="display:flex;gap:1rem;justify-content:center;">
+                        <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Yes,
+                            Delete</button>
+                        <a href="javascript:history.back()" class="btn btn-ghost">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

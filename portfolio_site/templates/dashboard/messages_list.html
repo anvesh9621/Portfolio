@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Messages{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+    <aside class="sidebar">{% include "dashboard/sidebar_nav.html" %}</aside>
+    <main class="dashboard-main">
+        <div style="margin-bottom:1.5rem;">
+            <h1 style="font-size:1.5rem;margin-bottom:0.2rem;">Contact Messages</h1>
+            <p class="text-muted">Messages submitted via the contact form</p>
+        </div>
+
+        {% if contact_messages %}
+        <div
+            style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;">
+            {% for msg in contact_messages %}
+            <div
+                style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);{% if not msg.is_read %}border-left:3px solid var(--accent);{% endif %}">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.5rem;">
+                    <div>
+                        <strong>{{ msg.name }}</strong>
+                        <span class="text-muted" style="margin-left:0.75rem;">{{ msg.email }}</span>
+                        {% if not msg.is_read %}
+                        <span class="badge badge-blue" style="margin-left:0.75rem;">New</span>
+                        {% else %}
+                        <span class="badge badge-amber" style="margin-left:0.75rem;">Read</span>
+                        {% endif %}
+                    </div>
+                    <div style="display:flex;align-items:center;gap:0.75rem;">
+                        <span class="text-muted" style="font-size:0.8rem;">{{ msg.timestamp|date:"M d, Y H:i" }}</span>
+                        {% if not msg.is_read %}
+                        <a href="{% url 'mark_message_read' msg.pk %}" class="btn btn-ghost btn-sm">
+                            <i class="fa-solid fa-check"></i> Mark Read
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <p class="text-muted" style="font-size:0.9rem;line-height:1.6;">{{ msg.message }}</p>
+                
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center"
+            style="padding:3rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);">
+            <i class="fa-solid fa-inbox"
+                style="font-size:2.5rem;color:var(--text-dim);margin-bottom:1rem;display:block;"></i>
+            <p class="text-muted">No messages yet. Messages will appear here when someone submits the contact form.</p>
+        </div>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

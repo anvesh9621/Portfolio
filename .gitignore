@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Virtual environment
+venv/
+env/
+.env
+*.env
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+django_debug.log
+
+# Media & Static (generated)
+media/
+portfolio_site/media/
+portfolio_site/staticfiles/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Docker
+*.pid
+
+# Coverage
+.coverage
+htmlcov/
+coverage.xml
+
+# Migrations (optional — keep them)
+# */migrations/
+
+# Secrets
+*.pem
+*.key
