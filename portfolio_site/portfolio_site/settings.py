@@ -34,12 +34,12 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     # Local apps
-    'portfolio_site.accounts_app',
-    'portfolio_site.projects_app',
-    'portfolio_site.skills_app',
-    'portfolio_site.achievements_app',
-    'portfolio_site.contact_app',
-    'portfolio_site.api_app',
+    'accounts_app',
+    'projects_app',
+    'skills_app',
+    'achievements_app',
+    'contact_app',
+    'api_app',
 ]
 
 MIDDLEWARE = [
