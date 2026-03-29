@@ -719,6 +719,10 @@ img {
   font-weight: 500;
   color: var(--accent);
   margin-bottom: 0.5rem;
+  min-height: 2em;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .hero-bio {
@@ -2002,6 +2006,9 @@ input[type="checkbox"] {
     gap: 2.5rem;
   }
 
+  .hero-role {
+    justify-content: center;
+  }
   .hero-image-wrap {
     order: -1;
   }

@@ -16,8 +16,7 @@
                 <h1 class="hero-name animate-fade-up-delay-1">
                     {% if profile %}{{ profile.name }}{% else %}Your Name{% endif %}
                 </h1>
-                <div class="hero-role animate-fade-up-delay-1"
-                    style="min-height: 2em; display:flex; align-items:flex-start;">
+                <div class="hero-role animate-fade-up-delay-1">
                     {% if profile %}
                     <span id="animated-role" data-roles="{{ profile.role }}">
                         {{ profile.role|truncatewords:10 }}
