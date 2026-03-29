@@ -35,7 +35,7 @@ def contact_view(request):
                 message=(
                     f'Hi {name},\n\n'
                     'Thank you for your message! I have received it and will get back to you shortly.\n\n'
-                    'Best regards,\nSuprit Mahajan'
+                    'Best regards,\nAnvesh Pandey'
                 ),
                 from_email=django_settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[email],
