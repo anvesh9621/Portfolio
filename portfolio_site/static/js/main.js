@@ -65,17 +65,18 @@
 
   if (hamburger && navLinks) {
     hamburger.addEventListener('click', () => {
-      const isOpen = navLinks.style.display === 'flex';
-      navLinks.style.display = isOpen ? 'none' : 'flex';
-      navLinks.style.flexDirection = 'column';
-      navLinks.style.position = 'absolute';
-      navLinks.style.top = '68px';
-      navLinks.style.left = '0';
-      navLinks.style.right = '0';
-      navLinks.style.background = 'var(--bg)';
-      navLinks.style.padding = '1rem 1.5rem';
-      navLinks.style.borderBottom = '1px solid var(--border)';
-      navLinks.style.zIndex = '999';
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('nav-active');
+      document.body.classList.toggle('no-scroll');
+    });
+
+    // Close drawer when a link is clicked
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('nav-active');
+        document.body.classList.remove('no-scroll');
+      });
     });
   }
 
