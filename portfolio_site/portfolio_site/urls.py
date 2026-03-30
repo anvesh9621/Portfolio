@@ -3,8 +3,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from django.http import HttpResponse
+
+def health_check(request):
+    return HttpResponse("OK", content_type="text/plain", status=200)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('health/', health_check),
     path('', include('accounts_app.urls')),
     path('', include('projects_app.urls')),
     path('', include('skills_app.urls')),
