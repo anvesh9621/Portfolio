@@ -13,4 +13,4 @@ python manage.py collectstatic --no-input
 python manage.py migrate
 
 # Temporarily load the database dump since free tier doesn't support shell
-python manage.py loaddata ./datadump.json
+python manage.py loaddata datadump.json
