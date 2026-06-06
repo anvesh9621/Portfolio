@@ -9,7 +9,7 @@ Designed with a modular architecture, REST API layer, cloud media storage, and a
 
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/Django-4.2-092E20?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Neon](https://img.shields.io/badge/Neon-Serverless_Postgres-00E5CC?style=for-the-badge&logo=postgresql&logoColor=white)](https://neon.tech/)
 [![DRF](https://img.shields.io/badge/DRF-3.17-A30000?style=for-the-badge&logo=django&logoColor=white)](https://www.django-rest-framework.org/)
 [![Render](https://img.shields.io/badge/Deployed_on-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://my-portfolio-a6jj.onrender.com/)
 [![License](https://img.shields.io/badge/License-Personal-lightgrey?style=for-the-badge)]()
@@ -67,7 +67,7 @@ This is not a static HTML portfolio — it's a **dynamic, database-driven web ap
 </tr>
 <tr>
 <td><b>Database</b></td>
-<td>PostgreSQL · dj-database-url</td>
+<td>Neon (Serverless PostgreSQL) · dj-database-url</td>
 </tr>
 <tr>
 <td><b>Frontend</b></td>
@@ -123,8 +123,8 @@ This is not a static HTML portfolio — it's a **dynamic, database-driven web ap
 └────────────────┬──────────────────────┬──────────────────────┘
                  │                      │
         ┌────────▼────────┐    ┌────────▼────────┐
-        │   PostgreSQL    │    │   Cloudinary    │
-        │   (Database)    │    │ (Media Storage) │
+        │  Neon Postgres  │    │   Cloudinary    │
+        │  (Serverless)   │    │ (Media Storage) │
         └─────────────────┘    └─────────────────┘
 ```
 
@@ -277,7 +277,7 @@ curl -X POST https://your-domain.com/api/projects/ \
 ### Prerequisites
 
 - Python 3.10+
-- PostgreSQL 14+
+- PostgreSQL 14+ (or a [Neon](https://neon.tech/) serverless database)
 - Git
 
 ### Installation
@@ -297,7 +297,7 @@ pip install -r portfolio_site/requirements.txt
 
 # 4. Set up environment variables
 cp .env.example .env
-# Edit .env with your PostgreSQL credentials and other settings
+# Edit .env with your Neon/PostgreSQL credentials and other settings
 
 # 5. Navigate to the Django project
 cd portfolio_site
@@ -329,7 +329,7 @@ Create a `.env` file in the project root. See [`.env.example`](.env.example) for
 | `SECRET_KEY` | ✅ | Django secret key for cryptographic signing |
 | `DEBUG` | ✅ | Set to `False` in production |
 | `ALLOWED_HOSTS` | ✅ | Comma-separated list of allowed hostnames |
-| `DATABASE_URL` | ⚡ | Full PostgreSQL connection string (Render) |
+| `DATABASE_URL` | ⚡ | Neon PostgreSQL connection string (production) |
 | `DB_NAME` | 🔄 | Database name (local fallback) |
 | `DB_USER` | 🔄 | Database user (local fallback) |
 | `DB_PASSWORD` | 🔄 | Database password (local fallback) |
@@ -359,7 +359,7 @@ This project is configured for one-click deployment on [Render](https://render.c
    python manage.py collectstatic --no-input
    python manage.py migrate
    ```
-3. **Database**: Uses `DATABASE_URL` env var → parsed by `dj-database-url`.
+3. **Database**: Uses `DATABASE_URL` env var (Neon serverless PostgreSQL) → parsed by `dj-database-url`.
 4. **Static Files**: Served by WhiteNoise middleware (no Nginx required).
 5. **Media Files**: Stored on Cloudinary (Render has an ephemeral filesystem).
 6. **Allowed Hosts**: Auto-configured via `RENDER_EXTERNAL_HOSTNAME`.
@@ -371,7 +371,7 @@ This project is configured for one-click deployment on [Render](https://render.c
 |----------|-------|
 | `SECRET_KEY` | A strong random key |
 | `DEBUG` | `False` |
-| `DATABASE_URL` | Your PostgreSQL connection string |
+| `DATABASE_URL` | Your Neon PostgreSQL connection string |
 | `CLOUDINARY_URL` | Your Cloudinary URL |
 | `EMAIL_HOST_USER` | Your Gmail address |
 | `EMAIL_HOST_PASSWORD` | Your Gmail App Password |
