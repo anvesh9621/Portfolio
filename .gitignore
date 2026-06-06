@@ -17,7 +17,7 @@ env/
 local_settings.py
 db.sqlite3
 django_debug.log
-*datadump.json
+# *datadump.json
 
 # Media & Static (generated)
 media/
